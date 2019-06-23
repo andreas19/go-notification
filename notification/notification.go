@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	Version         = "0.1.0"
+	Version         = "0.1.1"
 	ExpiresNever    = time.Duration(0)        // notification never expires
 	ExpiresDefault  = time.Duration(-1000000) // depends on the server's settings
 	busName         = "org.freedesktop.Notifications"
