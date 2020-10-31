@@ -2,7 +2,7 @@
 
 Go package for sending [Desktop Notifications](https://people.gnome.org/~mccann/docs/notification-spec/notification-spec-latest.html) and handling *NotificationClosed* and *ActionInvoked* signals.
 
-Documentation at [GoDoc](https://godoc.org/github.com/andreas19/go-notification/notification).
+For more information see the [documentation](https://pkg.go.dev/github.com/andreas19/go-notification/notification).
 
 ## Handler functions
 
