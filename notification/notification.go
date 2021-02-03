@@ -48,7 +48,7 @@ var (
 func SendNotification(summary, body, appName, appIcon string, urgency Urgency, timeout time.Duration) error {
 	conn, err := dbus.SessionBus()
 	if err != nil {
-		return fmt.Errorf("notification: Failed to connect to session bus: %v", err)
+		return fmt.Errorf("notification: Failed to connect to session bus: %w", err)
 	}
 	obj := conn.Object(busName, objPath)
 	hints := make(map[string]dbus.Variant, 1)
@@ -62,7 +62,7 @@ func SendNotification(summary, body, appName, appIcon string, urgency Urgency, t
 	call := obj.Call(busInterface+".Notify", 0, appName, uint32(0), icon, summary, body,
 		make([]string, 0), hints, int32(timeout.Seconds()*1000))
 	if call.Err != nil {
-		return fmt.Errorf("notification: %v", call.Err)
+		return fmt.Errorf("notification: %w", call.Err)
 	}
 	return nil
 }
@@ -75,17 +75,17 @@ func Init(appName, appIcon string) error {
 	var err error
 	busConn, err = dbus.SessionBus()
 	if err != nil {
-		return fmt.Errorf("notification: Failed to connect to session bus: %v", err)
+		return fmt.Errorf("notification: Failed to connect to session bus: %w", err)
 	}
 	notifications = make(map[uint32]*Notification)
 	busObj = busConn.Object(busName, objPath)
 	err = addMatch("NotificationClosed")
 	if err != nil {
-		return fmt.Errorf("notification: %v", err)
+		return fmt.Errorf("notification: %w", err)
 	}
 	err = addMatch("ActionInvoked")
 	if err != nil {
-		return fmt.Errorf("notification: %v", err)
+		return fmt.Errorf("notification: %w", err)
 	}
 	c := make(chan *dbus.Signal, sigBufferSize)
 	busConn.Signal(c)
@@ -132,7 +132,7 @@ func notificationClosedHandler(id, reason uint32) {
 func GetCapabilities() (result []string, err error) {
 	err = busObj.Call(busInterface+".GetCapabilities", 0).Store(&result)
 	if err != nil {
-		err = fmt.Errorf("notification: %v", err)
+		err = fmt.Errorf("notification: %w", err)
 	}
 	return
 }
@@ -149,7 +149,7 @@ type ServerInfo struct {
 func GetServerInformation() (*ServerInfo, error) {
 	call := busObj.Call(busInterface+".GetServerInformation", 0)
 	if call.Err != nil {
-		return nil, fmt.Errorf("notification: %v", call.Err)
+		return nil, fmt.Errorf("notification: %w", call.Err)
 	}
 	serverInfo := ServerInfo{call.Body[0].(string), call.Body[1].(string),
 		call.Body[2].(string), call.Body[3].(string)}
@@ -171,7 +171,7 @@ func Notify(noti *Notification) error {
 	err := busObj.Call(busInterface+".Notify", 0, AppName, noti.id, icon, noti.summary, noti.body,
 		noti.actionlist(), noti.hints, int32(noti.timeout.Seconds()*1000)).Store(&noti.id)
 	if err != nil {
-		fmt.Errorf("notification: %v", err)
+		fmt.Errorf("notification: %w", err)
 	} else {
 		notifications[noti.id] = noti
 	}
