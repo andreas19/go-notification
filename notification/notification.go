@@ -2,7 +2,7 @@
 // and handling signals (events).
 //
 // For more details see the specification:
-// https://people.gnome.org/~mccann/docs/notification-spec/notification-spec-latest.html
+// https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
 package notification
 
 import (
