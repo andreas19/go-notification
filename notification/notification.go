@@ -159,6 +159,9 @@ func GetServerInformation() (*ServerInfo, error) {
 // Notify sends a notification.
 func Notify(noti *Notification) error {
 	var icon string
+	if busObj == nil {
+		return fmt.Errorf("notification: dbus object is empty")
+	}
 	if noti.icon == "" {
 		icon = AppIcon
 	} else {
@@ -171,7 +174,7 @@ func Notify(noti *Notification) error {
 	err := busObj.Call(busInterface+".Notify", 0, AppName, noti.id, icon, noti.summary, noti.body,
 		noti.actionlist(), noti.hints, int32(noti.timeout.Seconds()*1000)).Store(&noti.id)
 	if err != nil {
-		fmt.Errorf("notification: %w", err)
+		err = fmt.Errorf("notification: %w", err)
 	} else {
 		notifications[noti.id] = noti
 	}
