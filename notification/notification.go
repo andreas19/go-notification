@@ -130,6 +130,9 @@ func notificationClosedHandler(id, reason uint32) {
 
 // GetCapabilities calls org.freedesktop.Notifications.GetCapabilities.
 func GetCapabilities() (result []string, err error) {
+	if busObj == nil {
+		return nil, fmt.Errorf("notification: D-Bus not initialized")
+	}
 	err = busObj.Call(busInterface+".GetCapabilities", 0).Store(&result)
 	if err != nil {
 		err = fmt.Errorf("notification: %w", err)
@@ -147,6 +150,9 @@ type ServerInfo struct {
 
 // GetServerInformation calls org.freedesktop.Notifications.GetServerInformation.
 func GetServerInformation() (*ServerInfo, error) {
+	if busObj == nil {
+		return nil, fmt.Errorf("notification: D-Bus not initialized")
+	}
 	call := busObj.Call(busInterface+".GetServerInformation", 0)
 	if call.Err != nil {
 		return nil, fmt.Errorf("notification: %w", call.Err)
@@ -160,7 +166,7 @@ func GetServerInformation() (*ServerInfo, error) {
 func Notify(noti *Notification) error {
 	var icon string
 	if busObj == nil {
-		return fmt.Errorf("notification: dbus object is empty")
+		return fmt.Errorf("notification: D-Bus not initialized")
 	}
 	if noti.icon == "" {
 		icon = AppIcon
