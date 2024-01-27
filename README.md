@@ -1,9 +1,9 @@
 # Go-Notification
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/andreas19/go-notification/notification.svg)](https://pkg.go.dev/github.com/andreas19/go-notification/notification)
+
 Go package for sending [Desktop Notifications](https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html)
 and handling *NotificationClosed* and *ActionInvoked* signals.
-
-For more information see the [documentation](https://pkg.go.dev/github.com/andreas19/go-notification/notification).
 
 ## Handler functions
 
